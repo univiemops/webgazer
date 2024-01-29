@@ -543,14 +543,15 @@ async function init(stream) {
   gazeDot.id = webgazer.params.gazeDotId;
   gazeDot.style.display = webgazer.params.showGazeDot ? 'block' : 'none';
   gazeDot.style.position = 'fixed';
-  gazeDot.style.zIndex = 99999;
+  gazeDot.style.zIndex = 9999; // changed from 99999
   gazeDot.style.left = '-5px';
   gazeDot.style.top  = '-5px';
-  gazeDot.style.background = 'red';
+  gazeDot.style.background = 'transparent'; // changed from red
   gazeDot.style.borderRadius = '100%';
-  gazeDot.style.opacity = '0.7';
-  gazeDot.style.width = '10px';
-  gazeDot.style.height = '10px';
+  gazeDot.style.opacity = '1.0'; // changed from 0.7
+  gazeDot.style.width = '90px'; // changed from 10px
+  gazeDot.style.height = '90px'; // changed from 10px
+  gazeDot.style.boxShadow = "0 0 20px rgba(0, 0, 0, 0.15)"; // added
 
   // Add other preview/feedback elements to the screen once the video has shown and its parameters are initialized
   videoContainerElement.appendChild(videoElement);
