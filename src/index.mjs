@@ -653,6 +653,18 @@ webgazer.begin = function(onFail) {
     try {
       stream = await navigator.mediaDevices.getUserMedia( webgazer.params.camConstraints );
       await init(stream);
+      try {
+        const videoTrack = stream.getVideoTracks()[0];
+        const { deviceId } = videoTrack.getSettings();
+        if (deviceId){
+            webgazer.params.camConstraints.video = {
+            ...webgazer.params.camConstraints.video,
+            deviceId: { exact: deviceId }
+            };
+        }
+        console.log(webgazer.params.camConstraints)  
+      } catch(errDevice) {
+        console.log(errDevice)}
       resolve(webgazer);
     } catch(err) {
       onFail();
