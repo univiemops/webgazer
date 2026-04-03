@@ -1,5 +1,7 @@
 # [WebGazer.js](https://webgazer.cs.brown.edu)
 
+> **Note:** As of February 24, 2026, WebGazer is fully functional and works as intended, but updates are no longer guaranteed. Official maintenance has ended, but community support continues via [GitHub Issues](https://github.com/brownhci/WebGazer/issues). It has been open source since February 2016 (over 10 years).
+
 WebGazer.js is an eye tracking library that uses common webcams to infer the eye-gaze locations of web visitors on a page in real time. The eye tracking model it contains self-calibrates by watching web visitors interact with the web page and trains a mapping between the features of the eye and positions on the screen. WebGazer.js is written entirely in JavaScript and with only a few lines of code can be integrated in any website that wishes to better understand their visitors and transform their user experience. WebGazer.js runs entirely in the client browser, so no video data needs to be sent to a server. WebGazer.js can run only if the user consents in giving access to their webcam.
 
 * [Official website](https://webgazer.cs.brown.edu)
@@ -137,6 +139,6 @@ This research is supported by NSF grants IIS-1464061, IIS-1552663, and the Brown
 
 ## License
 
-Copyright (C) 2016 [Brown WebGazer Team](https://webgazer.cs.brown.edu)
+Copyright (C) 2016-2026 [Brown WebGazer Team](https://webgazer.cs.brown.edu)
 
-Licensed under GPLv3. Companies have the option to license WebGazer.js under LGPLv3 while their valuation is under $1,000,000. For other licensing options, please contact webgazer@lists.cs.brown.edu
+Licensed under GPLv3. Companies have the option to license WebGazer.js under LGPLv3 while their valuation is under $1,000,000. For other licensing inquiries, please open an issue on [GitHub](https://github.com/brownhci/WebGazer/issues).

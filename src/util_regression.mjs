@@ -9,7 +9,7 @@ const util_regression = {};
  * Initialize new arrays and initialize Kalman filter for regressions.
  */
 util_regression.InitRegression = function() {
-  var dataWindow = 700;
+  var dataWindow = 50;
   var trailDataWindow = 10;
   this.ridgeParameter = Math.pow(10,-5);
   this.errorXArray = new util.DataWindow(dataWindow);
@@ -47,10 +47,6 @@ util_regression.InitRegression = function() {
   var delta_t = 1/10; // The amount of time between frames
   Q = mat.multScalar(Q, delta_t);
 
-  var H = [ [1, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0]];
   var H = [ [1, 0, 0, 0],
     [0, 1, 0, 0]];
   var pixel_error = 47; //We will need to fine tune this value [20200611 xk] I just put a random value here
@@ -109,11 +105,6 @@ util_regression.KalmanFilter.prototype.update = function(z) {
     // kalman multiplier: K = P * H' * (H * P * H' + R)^-1
     var K = mult(P_p, mult(transpose(this.H), inv(S))); //This is the Optimal Kalman Gain
 
-    //We need to change Y into it's column vector form
-    for(var i = 0; i < y.length; i++){
-        y[i] = [y[i]];
-    }
-
     //Now we correct the internal values of the model
     // correction: X = X + K * (m - H * X)  |  P = (I - K * H) * P
     this.X = add(X_p, mult(K, y));
@@ -147,14 +138,10 @@ util_regression.ridge = function(y, X, k){
             m_Coefficients[i] = bb[i][0];
         }
         try{
-            var n = (m_Coefficients.length !== 0 ? m_Coefficients.length/m_Coefficients.length: 0);
-            if (m_Coefficients.length*n !== m_Coefficients.length){
-                console.log('Array length must be a multiple of m')
-            }
             solution = mat.solve(ss, bb);
 
             for (var i = 0; i < nc; i++){
-                m_Coefficients[i] = solution[i];
+                m_Coefficients[i] = solution[i][0];
             }
             success = true;
         }

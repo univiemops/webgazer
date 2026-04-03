@@ -1,4 +1,6 @@
 const params = {
+  // Path to MediaPipe face_mesh solution files (WASM + model data)
+  faceMeshSolutionPath: './mediapipe/face_mesh',
   moveTickSize: 50,
   videoContainerId: 'webgazerVideoContainer',
   videoElementId: 'webgazerVideoFeed',

@@ -53,7 +53,7 @@ SearchGazer supports the following search engines for identification of areas of
 
 ## License
 
-Copyright (C) 2017 [Brown HCI Group](http://hci.cs.brown.edu)
+Copyright (C) 2016-2026 [Brown HCI Group](https://jeffhuang.com/hci/)
 
 Licensed under GPLv3.
 

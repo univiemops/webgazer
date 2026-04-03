@@ -46,7 +46,13 @@
 			</div>
 		</nav>
 
-		<div id="home" style="padding-top: 0px">
+		<div class="container mt-3">
+		<div class="alert alert-warning" role="alert">
+			As of February 24, 2026, WebGazer is fully functional and works as intended, but updates are no longer guaranteed. Official maintenance has ended, but community support continues via <a href="https://github.com/brownhci/WebGazer/issues" class="alert-link">GitHub Issues</a>. It has been open source since February 2016 (over 10 years).
+		</div>
+	</div>
+
+	<div id="home" style="padding-top: 0px">
 			<div class="py-3 py-sm-5 px-sm-3">
 				<h1 class="text-center mt-3" style="margin-bottom:20px"> WebGazer.js </h1>
 				<h2 class="text-center mb-3"> Democratizing Webcam Eye Tracking on the Browser</h2>
@@ -75,15 +81,11 @@
 							<p class="text-left padright" style="font-size:18px">Easy to integrate with a few lines of JavaScript</p>
 							<p class="text-left padright" style="font-size:18px">Swappable components for eye detection</p>
 							<p class="text-left padright" style="font-size:18px">Multiple gaze prediction models</p>
-							<p class="text-left padright" style="font-size:18px">Continually supported and open source for 6+ years</p>
+							<p class="text-left padright" style="font-size:18px">Open source since 2016 (over 10 years)</p>
 						</div>
 					</div>
 				</div>
-				<div class="row pt-4 text-center">
-					<div class="col-sm-12">
-						<h4>Want to be notified about updates? </h4><a class="btn btn-primary  my-2" href="https://docs.google.com/forms/d/e/1FAIpQLSeTCgnwF1gjrc1O8mfJ_5TmT_TLowFQ2DUhsollmqPG84pAFQ/viewform?usp=pp_url&entry.1299571007=WebGazer:+self-calibrating+online+webcam+eye+tracking&entry.1760653896=webgazer+frontpage" role="button">Subscribe</a>
-					</div>
-				</div>
+
 			</div>
 
 		</div>
@@ -141,14 +143,14 @@ if (prediction) {
 					<div class="col-lg-12">
 						<pre><code class="javascript hljs">webgazer.setTracker("TFFacemesh"); //set a tracker module</code></pre>
 						<pre><code class="javascript hljs">webgazer.addTrackerModule("newTracker", NewTrackerConstructor); //add a new tracker module</code></pre>
-						<p>Currently, MediaPipe <a href="https://github.com/tensorflow/tfjs-models/tree/master/facemesh">Facemesh</a> comes by default with WebGazer.js. Let us know if you want to introduce your own facial feature detection library. </p>
+						<p>Currently, MediaPipe <a href="https://github.com/tensorflow/tfjs-models/tree/master/facemesh">Facemesh</a> comes by default with WebGazer.js.</p>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-lg-12">
 						<pre><code class="javascript hljs">webgazer.setRegression("ridge"); //set a regression module</code></pre>
 						<pre><code class="javascript hljs">webgazer.addRegressionModule("newReg", NewRegConstructor); //add a new regression module</code></pre>
-						<p>Here are all the regression modules that come by default with WebGazer.js. Let us know if you would like introduce different modules - just keep in mind that they should be able to produce predictions very fast.</p>
+						<p>Here are all the regression modules that come by default with WebGazer.js. Community contributions introducing new modules are welcome on GitHub — keep in mind that they should be able to produce predictions very fast.</p>
 						<ul>
 							<li>ridge - a simple ridge regression model mapping pixels from the detected eyes to locations on the screen.</li>
 							<li>weightedRidge - a weight ridge regression model with newest user interactions contributing more to the model.</li>
@@ -430,8 +432,8 @@ npm run build</code></pre>
 		<hr class="featurette-divider">
 		<div id="license" class="container pad">
 			<h2 class="text-center">License</h2>
-			<p class="text-center">Copyright (C) 2016-2023 <a href="https://webgazer.cs.brown.edu">Brown WebGazer Team</a><br>
-			Licensed under <a href="http://www.gnu.org/licenses/gpl-3.0.en.html">GPLv3</a>. For other licensing options, please contact <a href="mailto:webgazer@lists.cs.brown.edu">webgazer@lists.cs.brown.edu</a>
+			<p class="text-center">Copyright (C) 2016-2026 <a href="https://webgazer.cs.brown.edu">Brown WebGazer Team</a><br>
+			Licensed under <a href="http://www.gnu.org/licenses/gpl-3.0.en.html">GPLv3</a>
 			</p>
 		</div>
 

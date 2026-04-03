@@ -3,8 +3,12 @@
 * text=auto
 
 # Force the following filetypes to have unix eols, so Windows does not break them
-*.* text eol=lf
+# *.* text eol=lf  # DISABLED - this was corrupting binary files!
 *.png binary
 *.jpg binary
 *.eot binary
 *.ttf binary
+*.wasm binary
+*.tflite binary
+*.data binary
+*.binarypb binary

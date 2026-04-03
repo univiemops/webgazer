@@ -54,6 +54,8 @@ const varConfig = {
 			            { source: './dist/webgazer.js.map', destination: './www/' },
 			            { source: './dist/webgazer.js', destination: './www/data/src/' },
 			            { source: './dist/webgazer.js.map', destination: './www/data/src/' },
+			            { source: './src/mediapipe/', destination: './dist/mediapipe/' },
+			            { source: './src/mediapipe/', destination: './www/mediapipe/' },
 			        ],
 				},
 			},

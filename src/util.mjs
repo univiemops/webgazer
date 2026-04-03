@@ -37,11 +37,10 @@ util.getEyeFeats = function(eyes) {
         this.equalizeHistogram(gray, 5, hist);
         return hist;
     };
-
-    if (webgazer.params.trackEye == 'left') {
+    if (params.trackEye == 'left') {
         return process(eyes.left);
     }
-    else if (webgazer.params.trackEye == 'right') {
+    else if (params.trackEye == 'right') {
         return process(eyes.right);
     }
     else {
@@ -227,7 +226,7 @@ util.resizeEye = function(eye, resizeWidth, resizeHeight) {
     canvas.width = eye.width;
     canvas.height = eye.height;
 
-    canvas.getContext('2d').putImageData(eye.patch,0,0);
+    canvas.getContext('2d', { willReadFrequently: true }).putImageData(eye.patch,0,0);
 
     var tempCanvas = document.createElement('canvas');
 

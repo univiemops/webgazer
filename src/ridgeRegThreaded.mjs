@@ -6,7 +6,7 @@ import mat from './mat.mjs';
 const reg = {};
 
 var ridgeParameter = Math.pow(10,-5);
-var dataWindow = 700;
+var dataWindow = 50;
 var weights = {'X':[0],'Y':[0]};
 var trailDataWindow = 10;
 
@@ -63,11 +63,7 @@ reg.RidgeRegThreaded.prototype.init = function() {
     var delta_t = 1/10; // The amount of time between frames    
     Q = mat.multScalar(Q, delta_t);    
 
-    var H = [ [1, 0, 0, 0, 0, 0],   
-              [0, 1, 0, 0, 0, 0],   
-              [0, 0, 1, 0, 0, 0],   
-              [0, 0, 0, 1, 0, 0]];  
-    var H = [ [1, 0, 0, 0], 
+    var H = [ [1, 0, 0, 0],
               [0, 1, 0, 0]];    
     var pixel_error = 47; //We will need to fine tune this value [20200611 xk] I just put a random value here   
 

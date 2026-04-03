@@ -1,21 +1,46 @@
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
+import params from './params.mjs';
+
+// Eye landmark indices for MediaPipe FaceMesh (468 landmarks)
+// Reference: https://github.com/tensorflow/tfjs-models/blob/master/face-landmarks-detection/mesh_map.jpg
+const EYE_INDICES = {
+  // Note: "left" and "right" are from the subject's perspective
+  leftEyeUpper0: [466, 388, 387, 386, 385, 384, 398],
+  leftEyeLower0: [263, 249, 390, 373, 374, 380, 381, 382, 362],
+  rightEyeUpper0: [246, 161, 160, 159, 158, 157, 173],
+  rightEyeLower0: [33, 7, 163, 144, 145, 153, 154, 155, 133],
+};
 
 /**
  * Constructor of TFFaceMesh object
  * @constructor
  * */
 const TFFaceMesh = function() {
-  //Backend options are webgl, wasm, and CPU.
-  //For recent laptops WASM is better than WebGL.
-  this.model = faceLandmarksDetection.load(
-    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-    { maxFaces: 1 }
-  );
+  this.model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+  this.detector = null;
   this.predictionReady = false;
 };
 
 // Global variable for face landmark positions array
 TFFaceMesh.prototype.positionsArray = null;
+
+/**
+ * Initialize the face detector with local MediaPipe solution files
+ * @return {Promise} resolves when detector is ready
+ */
+TFFaceMesh.prototype.init = async function() {
+  if (this.detector) {
+    return this.detector;
+  }
+
+  const detectorConfig = {
+    runtime: 'mediapipe',
+    solutionPath: params.faceMeshSolutionPath,
+  };
+
+  this.detector = await faceLandmarksDetection.createDetector(this.model, detectorConfig);
+  return this.detector;
+};
 
 /**
  * Isolates the two patches that correspond to the user's eyes
@@ -31,41 +56,36 @@ TFFaceMesh.prototype.getEyePatches = async function(video, imageCanvas, width, h
     return null;
   }
 
-  // Load the MediaPipe facemesh model.
-  const model = await this.model;
+  // Initialize detector if not already done
+  await this.init();
 
-  // Pass in a video stream (or an image, canvas, or 3D tensor) to obtain an
-  // array of detected faces from the MediaPipe graph.
-  const predictions = await model.estimateFaces({
-    input: video,
-    returnTensors: false,
-    flipHorizontal: false,
-    predictIrises: false,
-  });
+  // Pass in a video stream to obtain an array of detected faces
+  const predictions = await this.detector.estimateFaces(video);
 
   if (predictions.length == 0){
     return false;
   }
 
-  // Save positions to global variable
-  this.positionsArray = predictions[0].scaledMesh;
-  const prediction = predictions[0]
-  const positions = this.positionsArray;
+  // MediaPipe runtime returns keypoints as array of {x, y, z, name?} objects
+  // Convert to [x, y, z] array format for compatibility with rest of codebase
+  const keypoints = predictions[0].keypoints;
+  this.positionsArray = keypoints.map(kp => [kp.x, kp.y, kp.z || 0]);
 
-  const { scaledMesh } = predictions[0];
-  // Keypoints indexes are documented at
-  // https://github.com/tensorflow/tfjs-models/blob/118d4727197d4a21e2d4691e134a7bc30d90deee/face-landmarks-detection/mesh_map.jpg
-  // https://stackoverflow.com/questions/66649492/how-to-get-specific-landmark-of-face-like-lips-or-eyes-using-tensorflow-js-face
+  // Helper function to get landmark coordinates by indices
+  const getPointsByIndices = (indices) => {
+    return indices.map(idx => [keypoints[idx].x, keypoints[idx].y, keypoints[idx].z || 0]);
+  };
+
   const [leftBBox, rightBBox] = [
-    // left
+    // left (from subject's perspective)
     {
-      eyeTopArc: prediction.annotations.leftEyeUpper0,
-      eyeBottomArc: prediction.annotations.leftEyeLower0
+      eyeTopArc: getPointsByIndices(EYE_INDICES.leftEyeUpper0),
+      eyeBottomArc: getPointsByIndices(EYE_INDICES.leftEyeLower0)
     },
-    // right
+    // right (from subject's perspective)
     {
-      eyeTopArc: prediction.annotations.rightEyeUpper0,
-      eyeBottomArc: prediction.annotations.rightEyeLower0
+      eyeTopArc: getPointsByIndices(EYE_INDICES.rightEyeUpper0),
+      eyeBottomArc: getPointsByIndices(EYE_INDICES.rightEyeLower0)
     },
   ].map(({ eyeTopArc, eyeBottomArc }) => {
     const topLeftOrigin = {
@@ -105,7 +125,7 @@ TFFaceMesh.prototype.getEyePatches = async function(video, imageCanvas, width, h
   // Start building object to be returned
   var eyeObjs = {};
 
-  var leftImageData = imageCanvas.getContext('2d').getImageData(leftOriginX, leftOriginY, leftWidth, leftHeight);
+  var leftImageData = imageCanvas.getContext('2d', { willReadFrequently: true }).getImageData(leftOriginX, leftOriginY, leftWidth, leftHeight);
   eyeObjs.left = {
     patch: leftImageData,
     imagex: leftOriginX,
@@ -114,7 +134,7 @@ TFFaceMesh.prototype.getEyePatches = async function(video, imageCanvas, width, h
     height: leftHeight
   };
 
-  var rightImageData = imageCanvas.getContext('2d').getImageData(rightOriginX, rightOriginY, rightWidth, rightHeight);
+  var rightImageData = imageCanvas.getContext('2d', { willReadFrequently: true }).getImageData(rightOriginX, rightOriginY, rightWidth, rightHeight);
   eyeObjs.right = {
     patch: rightImageData,
     imagex: rightOriginX,
